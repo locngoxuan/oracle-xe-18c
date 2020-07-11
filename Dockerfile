@@ -11,9 +11,20 @@ COPY oracle-database-xe-18c-1.0-1.x86_64.rpm .
 ENV ORACLE_DOCKER_INSTALL=true
 RUN yum -y localinstall oracle-database-xe-18c-1.0-1.x86_64.rpm
 
-RUN rm oracle-database-xe-18c-1.0-1.x86_64.rpm
-ARG ORACLE_PASSWORD=oracle
-RUN env ORACLE_PASSWORD=$ORACLE_PASSWORD ORACLE_CONFIRM_PASSWORD=$ORACLE_PASSWORD /etc/init.d/oracle-xe-18c configure
+RUN rm oracle-database-xe-18c-1.0-1.x86_64.rpm \
+	&&  rm oracle-database-preinstall-18c-1.0-1.el7.x86_64.rpm
+
+ARG PASSWORD=oracle
+ENV ORACLE_PASSWORD=$PASSWORD \
+	ORACLE_CONFIRM_PASSWORD=$PASSWORD \
+	ORACLE_HOME=/opt/oracle/product/18c/dbhomeXE \
+	ORACLE_SID=XE
+
+# RUN echo $ORACLE_PASSWORD $ORACLE_CONFIRM_PASSWORD
+RUN export PATH=$ORACLE_HOME/bin:$PATH
+RUN /etc/init.d/oracle-xe-18c configure
+COPY listener.ora /opt/oracle/product/18c/dbhomeXE/network/admin/listener.ora
+COPY tnsnames.ora /opt/oracle/product/18c/dbhomeXE/network/admin/tnsnames.ora
 
 EXPOSE 1521/tcp 5500/tcp
 ENTRYPOINT ["/bin/sh", "-c", "/etc/init.d/oracle-xe-18c start; sleep 3600"]
