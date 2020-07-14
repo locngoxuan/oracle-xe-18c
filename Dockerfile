@@ -25,6 +25,8 @@ RUN export PATH=$ORACLE_HOME/bin:$PATH
 RUN /etc/init.d/oracle-xe-18c configure
 COPY listener.ora /opt/oracle/product/18c/dbhomeXE/network/admin/listener.ora
 COPY tnsnames.ora /opt/oracle/product/18c/dbhomeXE/network/admin/tnsnames.ora
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod a+x /entrypoint.sh
 
 EXPOSE 1521/tcp 5500/tcp
-ENTRYPOINT ["/bin/sh", "-c", "/etc/init.d/oracle-xe-18c start; sleep 3600"]
+ENTRYPOINT ["/bin/sh", "-c", "/entrypoint.sh"]
