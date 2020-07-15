@@ -7,8 +7,7 @@ RUN yum -y localinstall oracle-database-preinstall-18c-1.0-1.el7.x86_64.rpm
 # Download oracle-database-xe-18c-1.0-1.x86_64.rpm from
 # https://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html
 RUN echo 'Download oracle-database-xe-18c-1.0-1.x86_64.rpm from https://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html'
-RUN cyrl -o oracle-database-xe-18c-1.0-1.x86_64.rpm https://download.oracle.com/otn-pub/otn_software/db-express/oracle-database-xe-18c-1.0-1.x86_64.rpm
-#COPY oracle-database-xe-18c-1.0-1.x86_64.rpm .
+COPY oracle-database-xe-18c-1.0-1.x86_64.rpm .
 ENV ORACLE_DOCKER_INSTALL=true
 RUN yum -y localinstall oracle-database-xe-18c-1.0-1.x86_64.rpm
 
